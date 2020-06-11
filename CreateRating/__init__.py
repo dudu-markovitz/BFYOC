@@ -4,7 +4,7 @@ import uuid, datetime, json, requests
 
 from pydocumentdb import document_client, documents
 import os
-# comment 2
+# comment 3
 def get_rating_db_client():
     masterKey = os.environ.get('cosmos_db_rating_master_key')
     host = os.environ.get('cosmos_db_rating_host')
