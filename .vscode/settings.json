@@ -1,0 +1,8 @@
+{
+    "python.pythonPath": "C:\\Users\\dumarkov\\Anaconda3\\envs\\python36\\python.exe",
+    "azureFunctions.deploySubpath": ".",
+    "azureFunctions.scmDoBuildDuringDeployment": true,
+    "azureFunctions.projectLanguage": "Python",
+    "azureFunctions.projectRuntime": "~3",
+    "debug.internalConsoleOptions": "neverOpen"
+}
