@@ -1,0 +1,14 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "event",
+      "direction": "in",
+      "eventHubName": "order-combine-files",
+      "connection": "eventhub_ns_sap_sl",
+      "cardinality": "one",
+      "consumerGroup": "$Default"
+    }
+  ]
+}

@@ -1,2 +1,4 @@
 azure-functions
 pydocumentdb
+azure.storage.blob
+azure.eventhub
