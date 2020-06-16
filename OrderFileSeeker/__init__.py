@@ -23,35 +23,37 @@ def main(event: func.EventHubEvent):
     
     logging.info(event_body)
 
-    event_json = json.loads(event_body)[0]
+    event_json = json.loads(event_body)
 
-    url = event_json["data"]["url"]
-    url_dirname = os.path.dirname(url)
-    url_basename = os.path.basename(url)
-    order_id = re.findall('\d+', url_basename)[0]
+    for e in event_json:
 
-    blobs = list(container.list_blobs(name_starts_with = order_id))
-    
-    blob_ts = {b['name'] : (b['last_modified'], b['etag'])  for b in blobs}
-    blob_ts_max = max(blob_ts.values())
-    
-    doc = dict()
+        url = e["data"]["url"]
+        url_dirname = os.path.dirname(url)
+        url_basename = os.path.basename(url)
+        order_id = re.findall('\d+', url_basename)[0]
 
-    if len(blobs) == 3 and blob_ts[url_basename] == blob_ts_max:
-        for b in blobs:
-            blob_name = b['name']
-            file_type = order_file_type.get(re.findall('(?<=-)\w+(?=\.)', blob_name)[0].lower())
-
-            doc[file_type] = f'{url_dirname}/{blob_name}'
+        blobs = list(container.list_blobs(name_starts_with = order_id))
         
-        doc_json = json.dumps(doc)
+        blob_ts = {b['name'] : (b['last_modified'], b['etag'])  for b in blobs}
+        blob_ts_max = max(blob_ts.values())
         
-        producer = EventHubProducerClient.from_connection_string(conn_str = eventhub_ns_sap_sl, eventhub_name = eventhub_order_combine_files)
+        doc = dict()
 
-        try: 
-            event_data_batch = producer.create_batch()
-            event_data_batch.add(EventData(doc_json))         
-            producer.send_batch(event_data_batch)
-        finally:
-            producer.close()
+        if len(blobs) == 3 and blob_ts[url_basename] == blob_ts_max:
+            for b in blobs:
+                blob_name = b['name']
+                file_type = order_file_type.get(re.findall('(?<=-)\w+(?=\.)', blob_name)[0].lower())
+
+                doc[file_type] = f'{url_dirname}/{blob_name}'
+            
+            doc_json = json.dumps(doc)
+            
+            producer = EventHubProducerClient.from_connection_string(conn_str = eventhub_ns_sap_sl, eventhub_name = eventhub_order_combine_files)
+
+            try: 
+                event_data_batch = producer.create_batch()
+                event_data_batch.add(EventData(doc_json))         
+                producer.send_batch(event_data_batch)
+            finally:
+                producer.close()
 

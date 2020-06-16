@@ -21,6 +21,7 @@ def main(event: func.EventHubEvent):
 
     event_json = json.loads(event_str)
 
-    event_json['id'] = event_json['header']['salesNumber']
+    for e in event_json:
+        e['id'] = e['header']['salesNumber']
 
-    client.CreateDocument(collLink, event_json)
+        client.CreateDocument(collLink, e)
