@@ -19,6 +19,9 @@ def main(event: func.EventHubEvent):
     
     container = ContainerClient.from_connection_string(conn_str = storage_orders, container_name = storage_orders_container)
 
+    if not isinstance(event, list):
+        event = [event]
+
     for e in event:
 
         event_body = e.get_body().decode('utf-8')
