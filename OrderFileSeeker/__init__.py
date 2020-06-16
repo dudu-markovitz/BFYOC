@@ -19,44 +19,39 @@ def main(event: func.EventHubEvent):
     
     container = ContainerClient.from_connection_string(conn_str = storage_orders, container_name = storage_orders_container)
 
-    if not isinstance(event, list):
-        event = [event]
-
-    for e in event:
-
-        event_body = e.get_body().decode('utf-8')
-        
-        logging.info(event_body)
-
-        event_json = json.loads(event_body)[0]
+    event_body = event.get_body().decode('utf-8')
     
-        url = event_json["data"]["url"]
-        url_dirname = os.path.dirname(url)
-        url_basename = os.path.basename(url)
-        order_id = re.findall('\d+', url_basename)[0]
+    logging.info(event_body)
 
-        blobs = list(container.list_blobs(name_starts_with = order_id))
+    event_json = json.loads(event_body)[0]
+
+    url = event_json["data"]["url"]
+    url_dirname = os.path.dirname(url)
+    url_basename = os.path.basename(url)
+    order_id = re.findall('\d+', url_basename)[0]
+
+    blobs = list(container.list_blobs(name_starts_with = order_id))
+    
+    blob_ts = {b['name'] : (b['last_modified'], b['etag'])  for b in blobs}
+    blob_ts_max = max(blob_ts.values())
+    
+    doc = dict()
+
+    if len(blobs) == 3 and blob_ts[url_basename] == blob_ts_max:
+        for b in blobs:
+            blob_name = b['name']
+            file_type = order_file_type.get(re.findall('(?<=-)\w+(?=\.)', blob_name)[0].lower())
+
+            doc[file_type] = f'{url_dirname}/{blob_name}'
         
-        blob_ts = {b['name'] : (b['last_modified'], b['etag'])  for b in blobs}
-        blob_ts_max = max(blob_ts.values())
+        doc_json = json.dumps(doc)
         
-        doc = dict()
+        producer = EventHubProducerClient.from_connection_string(conn_str = eventhub_ns_sap_sl, eventhub_name = eventhub_order_combine_files)
 
-        if len(blobs) == 3 and blob_ts[url_basename] == blob_ts_max:
-            for b in blobs:
-                blob_name = b['name']
-                file_type = order_file_type.get(re.findall('(?<=-)\w+(?=\.)', blob_name)[0].lower())
-
-                doc[file_type] = f'{url_dirname}/{blob_name}'
-            
-            doc_json = json.dumps(doc)
-            
-            producer = EventHubProducerClient.from_connection_string(conn_str = eventhub_ns_sap_sl, eventhub_name = eventhub_order_combine_files)
-
-            try: 
-                event_data_batch = producer.create_batch()
-                event_data_batch.add(EventData(doc_json))         
-                producer.send_batch(event_data_batch)
-            finally:
-                producer.close()
+        try: 
+            event_data_batch = producer.create_batch()
+            event_data_batch.add(EventData(doc_json))         
+            producer.send_batch(event_data_batch)
+        finally:
+            producer.close()
 

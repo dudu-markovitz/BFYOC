@@ -7,7 +7,7 @@
       "direction": "in",
       "eventHubName": "order-file-path",
       "connection": "eventhub_ns_sap_sl",
-      "cardinality": "many",
+      "cardinality": "one",
       "consumerGroup": "$Default"
     }
   ]
