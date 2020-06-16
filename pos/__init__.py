@@ -16,13 +16,11 @@ def main(event: func.EventHubEvent):
 
     client = document_client.DocumentClient(cosmosdb_pos_host, {'masterKey': cosmosdb_pos_masterKey})
 
-    for e in event:
+    event_str = event.get_body().decode('utf-8')
+    logging.info(event_str)      
 
-        event_str = e.get_body().decode('utf-8')
-        logging.info(event_str)      
+    event_json = json.loads(event_str)
 
-        event_json = json.loads(event_str)
+    event_json['id'] = event_json['header']['salesNumber']
 
-        event_json['id'] = event_json['header']['salesNumber']
-
-        client.CreateDocument(collLink, event_json)
+    client.CreateDocument(collLink, event_json)
