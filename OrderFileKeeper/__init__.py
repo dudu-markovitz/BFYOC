@@ -7,8 +7,8 @@ def main(event: func.EventHubEvent):
 
     cosmosdb_order_masterKey = os.environ.get('cosmosdb_order_masterKey')
     cosmosdb_order_host = os.environ.get('cosmosdb_order_host')
-    cosmos_db_order_databaseId = os.environ.get('cosmos_db_order_databaseId')
-    cosmos_db_order_collectionId = os.environ.get('cosmos_db_order_collectionId')    
+    cosmosdb_order_databaseId = os.environ.get('cosmosdb_order_databaseId')
+    cosmosdb_order_collectionId = os.environ.get('cosmosdb_order_collectionId')    
 
     event_body = event.get_body().decode('utf-8')
     logging.info(event_body)
@@ -22,8 +22,8 @@ def main(event: func.EventHubEvent):
 
     for sale in doc_json:
 
-        dbLink = 'dbs/' + cosmos_db_order_databaseId
-        collLink = dbLink + '/colls/' + cosmos_db_order_collectionId
+        dbLink = 'dbs/' + cosmosdb_order_databaseId
+        collLink = dbLink + '/colls/' + cosmosdb_order_collectionId
 
         sale['salesNumber'] = sale['headers']['salesNumber']
 

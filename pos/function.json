@@ -1,0 +1,14 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "event",
+      "direction": "in",
+      "eventHubName": "pos",
+      "connection": "eventhub_ns_sap_sl",
+      "cardinality": "many",
+      "consumerGroup": "$Default"
+    }
+  ]
+}

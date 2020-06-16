@@ -5,15 +5,15 @@ from pydocumentdb import document_client, documents
 import json, os
 
 def get_rating_db_client():
-    masterKey = os.environ.get('cosmos_db_rating_master_key')
-    host = os.environ.get('cosmos_db_rating_host')
+    masterKey = os.environ.get('cosmosdb_rating_master_key')
+    host = os.environ.get('cosmosdb_rating_host')
 
     return document_client.DocumentClient(host, {'masterKey': masterKey})
 
 
 def get_rating_db_collLink():
-    databaseId = os.environ.get('cosmos_db_rating_databaseId')
-    collectionId = os.environ.get('cosmos_db_rating_collectionId')
+    databaseId = os.environ.get('cosmosdb_rating_databaseId')
+    collectionId = os.environ.get('cosmosdb_rating_collectionId')
     return f'dbs/{databaseId}/colls/{collectionId}'
 
 
