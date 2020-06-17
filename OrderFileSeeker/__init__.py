@@ -36,10 +36,11 @@ def main(event: func.EventHubEvent):
         
         blob_ts = {b['name'] : (b['last_modified'], b['etag'])  for b in blobs}
 
-        raise Exception ("lama?!")
-    
-        blob_ts_max = max(blob_ts.values())
-        
+        try:
+            blob_ts_max = max(blob_ts.values())
+        except:
+            raise Exception (f"lama?! {url}")
+
         doc = dict()
 
         if len(blobs) == 3 and blob_ts[url_basename] == blob_ts_max:
