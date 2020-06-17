@@ -27,7 +27,7 @@ def main(event: func.EventHubEvent):
 
     for e in event_json:
         e['id'] = e['header']['salesNumber']        
-        client.CreateDocument(collLink, e)
+        client.UpsertDocument(collLink, e)
 
         totalCost = float(e["header"]["totalCost"]) 
 
