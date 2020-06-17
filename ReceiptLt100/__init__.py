@@ -22,11 +22,11 @@ def main(message: func.ServiceBusMessage):
     receipt_json = json.loads(message_body)
 
     receipt_lt100_json = {
-        "Store": receipt["storeLocation"],
-        "SalesNumber": receipt["salesNumber"],
-        "TotalCost": receipt["totalCost"],
-        "Items": receipt["totalItems"],
-        "SalesDate": receipt["salesDate"]
+        "Store": receipt_json["storeLocation"],
+        "SalesNumber": receipt_json["salesNumber"],
+        "TotalCost": receipt_json["totalCost"],
+        "Items": receipt_json["totalItems"],
+        "SalesDate": receipt_json["salesDate"]
     }
 
 
