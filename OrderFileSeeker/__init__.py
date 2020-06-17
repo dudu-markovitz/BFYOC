@@ -21,7 +21,7 @@ def main(event: func.EventHubEvent):
 
     event_body = event.get_body().decode('utf-8')
     
-    logging.info(event_body)
+    logging.info('lama1 ' + event_body)
 
     event_json = json.loads(event_body)
 
