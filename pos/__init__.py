@@ -29,7 +29,7 @@ def main(event: func.EventHubEvent):
         e['id'] = e['header']['salesNumber']        
         client.CreateDocument(collLink, e)
 
-        totalCost = float(e["header"]["totalCost"])
+        totalCost = float(e["header"]["totalCost"]) 
 
         receipt = {
             "totalItems": len(e["details"]),
