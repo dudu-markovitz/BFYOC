@@ -33,7 +33,7 @@ def main(event: func.EventHubEvent):
 
         receipt = {
             "totalItems": len(e["details"]),
-            "totalCost": e["header"]["totalCost"],
+            "totalCost": float(e["header"]["totalCost"]),
             "salesNumber": e["header"]["salesNumber"],
             "salesDate": e["header"]["dateTime"],
             "storeLocation": e["header"]["locationId"],
@@ -41,6 +41,6 @@ def main(event: func.EventHubEvent):
         }
 
         tc = TopicClient.from_connection_string(servicebus_pos_conn_str, servicebus_pos_topic_name)
-        msg = Message(json.dumps(receipt).encode('utf8'))
+        msg = Message(json.dumps(receipt).encode('utf8'), ContentType='application/json;charset=utf-8')
         tc.send(msg)
 

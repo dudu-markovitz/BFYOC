@@ -12,12 +12,12 @@ order_file_type = {
 
 def main(event: func.EventHubEvent):
 
-    storage_orders = os.environ.get('storage_orders')
+    storage_orders_conn_str = os.environ.get('storage_orders_conn_str')
     storage_orders_container = os.environ.get('storage_orders_container')
     eventhub_ns_sap_sl = os.environ.get('eventhub_ns_sap_sl')
     eventhub_order_combine_files = os.environ.get('eventhub_order_combine_files')
     
-    container = ContainerClient.from_connection_string(conn_str = storage_orders, container_name = storage_orders_container)
+    container = ContainerClient.from_connection_string(conn_str = storage_orders_conn_str, container_name = storage_orders_container)
 
     event_body = event.get_body().decode('utf-8')
     
