@@ -40,7 +40,9 @@ def main(event: func.EventHubEvent):
             "receiptUrl": e["header"]["receiptUrl"]
         }
 
+
         tc = TopicClient.from_connection_string(servicebus_pos_conn_str, servicebus_pos_topic_name)
         msg = Message(json.dumps(receipt).encode('utf8'), ContentType='application/json;charset=utf-8')
+        msg.user_properties = {'totalCost' : float(e["header"]["totalCost"]}
         tc.send(msg)
 
