@@ -33,7 +33,7 @@ def main(event: func.EventHubEvent):
 
         receipt = {
             "totalItems": len(e["details"]),
-            "totalCost": totalCost),
+            "totalCost": totalCost,
             "salesNumber": e["header"]["salesNumber"],
             "salesDate": e["header"]["dateTime"],
             "storeLocation": e["header"]["locationId"],
