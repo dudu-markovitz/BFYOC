@@ -24,6 +24,8 @@ def main(message: func.ServiceBusMessage):
     
     receiptUrl = receipt_json["receiptUrl"]
 
+    ReceiptImage = None
+    
     if receiptUrl is not None:
         response = requests.get(receiptUrl)
         ReceiptImage = base64.b64encode(response.content)
