@@ -21,7 +21,7 @@ def main(event: func.EventHubEvent):
 
     event_body = event.get_body().decode('utf-8')
     
-    logging.info('lama1 ' + event_body)
+    logging.info(event_body)
 
     event_json = json.loads(event_body)
 
@@ -35,6 +35,9 @@ def main(event: func.EventHubEvent):
         blobs = list(container.list_blobs(name_starts_with = order_id))
         
         blob_ts = {b['name'] : (b['last_modified'], b['etag'])  for b in blobs}
+
+        raise Exception ("lama?!")
+    
         blob_ts_max = max(blob_ts.values())
         
         doc = dict()
