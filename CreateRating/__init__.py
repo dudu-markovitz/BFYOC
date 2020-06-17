@@ -89,7 +89,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     req_body['id'] = get_id()
     req_body['timestamp'] = get_timestamp()
-    req_body['sentimentScore'] = get_sentiment(req_body["userNotes"])
+
+    sentimentScore = get_sentiment(req_body["userNotes"])
+    req_body['sentimentScore'] = sentimentScore
+
+    logging.info(json.dumps({"sentimentScore": sentimentScore}))
 
     collLink = get_rating_db_collLink()
     client = get_rating_db_client()
