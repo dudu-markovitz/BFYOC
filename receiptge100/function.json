@@ -7,7 +7,7 @@
       "type": "serviceBusTrigger",
       "direction": "in",
       "topicName": "receipt",
-      "subscriptionName": "receiptge100",
+      "subscriptionName": "receipt_ge_100",
       "connection": "servicebus_pos_conn_str"
     }
   ]
