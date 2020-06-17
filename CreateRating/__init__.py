@@ -4,7 +4,9 @@ import uuid, datetime, json, requests
 
 from pydocumentdb import document_client, documents
 import os
-# comment 3
+import requests, json
+
+
 def get_rating_db_client():
     masterKey = os.environ.get('cosmosdb_rating_master_key')
     host = os.environ.get('cosmosdb_rating_host')
@@ -35,6 +37,31 @@ def get_id():
 def get_timestamp():
     return datetime.datetime.utcnow().replace(microsecond=0).isoformat(' ')
 
+def get_sentiment (text):
+
+    sentiment_endpoint = os.environ.get('sentiment_endpoint')
+    sentiment_api = os.environ.get('sentiment_api')
+    sentiment_key = os.environ.get('sentiment_key')
+
+    documents = \
+        {
+        "documents": [
+            {
+            "language": "en",
+            "id": "1",
+            "text": text
+            }
+        ]
+        }        
+
+    url = f'{sentiment_endpoint}{sentiment_api}'
+    headers = {"Ocp-Apim-Subscription-Key": sentiment_key}
+
+    response = requests.post(url, headers = headers, json = documents)
+
+    return response.json()["documents"][0]["score"]
+
+
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
@@ -62,6 +89,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     req_body['id'] = get_id()
     req_body['timestamp'] = get_timestamp()
+    req_body['sentimentScore'] = get_sentiment(req_body["userNotes"])
 
     collLink = get_rating_db_collLink()
     client = get_rating_db_client()
@@ -70,6 +98,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         client.CreateDocument(collLink, req_body)
         return func.HttpResponse(json.dumps(req_body))
     except:
-        return func.HttpResponse('cannot connect to rating db', status_code = 400)
+        return func.HttpResponse('failed to create document', status_code = 400)
 
  
