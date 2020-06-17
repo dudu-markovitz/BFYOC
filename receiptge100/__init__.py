@@ -29,7 +29,7 @@ def main(message: func.ServiceBusMessage):
     if receiptUrl is not None:
         response = requests.get(receiptUrl)
         ReceiptImage = base64.b64encode(response.content).decode('utf-8')
-
+ 
     receipt_ge100_json = {
         "Store": receipt_json["storeLocation"],
         "SalesNumber": receipt_json["salesNumber"],
