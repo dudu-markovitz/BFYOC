@@ -17,7 +17,7 @@ def main(message: func.ServiceBusMessage):
     logging.info(json.dumps(logging_info))
 
     storage_receipt_conn_str = os.environ.get('storage_receipt_conn_str')
-    storage_receipt_lt100_container = os.environ.get('storage_receipt_lt100_container')
+    storage_receipt_ge100_container = os.environ.get('storage_receipt_ge100_container')
 
 
     receipt_json = json.loads(message_body)
@@ -42,5 +42,5 @@ def main(message: func.ServiceBusMessage):
 
     blob_name = receipt_json["salesNumber"] + '.json'
 
-    blob_service = blob.BlobClient.from_connection_string(storage_receipt_conn_str, storage_receipt_lt100_container, blob_name)
-    blob_service.upload_blob(json.dumps(receipt_ge100_json))
+    blob_service = blob.BlobClient.from_connection_string(storage_receipt_conn_str, storage_receipt_ge100_container, blob_name)
+    blob_service.upload_blob(json.dumps(receipt_ge100_json), overwrite = True)

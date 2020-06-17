@@ -33,4 +33,4 @@ def main(message: func.ServiceBusMessage):
     blob_name = receipt_json["salesNumber"] + '.json'
 
     blob_service = blob.BlobClient.from_connection_string(storage_receipt_conn_str, storage_receipt_lt100_container, blob_name)
-    blob_service.upload_blob(json.dumps(receipt_lt100_json))
+    blob_service.upload_blob(json.dumps(receipt_lt100_json), overwrite = True)
