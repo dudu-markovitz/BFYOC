@@ -26,14 +26,14 @@ def main(event: func.EventHubEvent):
     event_json = json.loads(event_str)
 
     for e in event_json:
-        e['id'] = e['header']['salesNumber']
-
+        e['id'] = e['header']['salesNumber']        
         client.CreateDocument(collLink, e)
 
+        totalCost = float(e["header"]["totalCost"]
 
         receipt = {
             "totalItems": len(e["details"]),
-            "totalCost": float(e["header"]["totalCost"]),
+            "totalCost": totalCost),
             "salesNumber": e["header"]["salesNumber"],
             "salesDate": e["header"]["dateTime"],
             "storeLocation": e["header"]["locationId"],
@@ -43,6 +43,6 @@ def main(event: func.EventHubEvent):
 
         tc = TopicClient.from_connection_string(servicebus_pos_conn_str, servicebus_pos_topic_name)
         msg = Message(json.dumps(receipt).encode('utf8'), ContentType='application/json;charset=utf-8')
-        msg.user_properties = {'totalCost' : float(e["header"]["totalCost"]}
+        msg.user_properties = {'totalCost': totalCost}
         tc.send(msg)
 
