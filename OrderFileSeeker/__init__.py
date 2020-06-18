@@ -36,10 +36,7 @@ def main(event: func.EventHubEvent):
         
         blob_ts = {b['name'] : (b['last_modified'], b['etag'])  for b in blobs}
 
-        try:
-            blob_ts_max = max(blob_ts.values())
-        except:
-            raise Exception (json.dumps({"type":"lama?!", "url": url, "order_id": order_id}))
+        blob_ts_max = max(blob_ts.values())
 
         doc = dict()
 
