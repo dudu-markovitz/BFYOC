@@ -21,7 +21,7 @@ def main(event: func.EventHubEvent):
 
     event_body = event.get_body().decode('utf-8')
     
-    logging.info(event_body)
+    logging.info("OrderFileSeeker-event_body" + event_body)
 
     event_json = json.loads(event_body)
 
@@ -46,7 +46,7 @@ def main(event: func.EventHubEvent):
         if len(blobs) == 3 and blob_ts[url_basename] == blob_ts_max:
             for b in blobs:
                 blob_name = b['name']
-                file_type = order_file_type.get(re.findall('(?<=-)\w+(?=\.)', blob_name)[0].lower())
+                file_type = order_file_type.get(re.findall(r'(?<=-)\w+(?=\.)', blob_name)[0].lower())
 
                 doc[file_type] = f'{url_dirname}/{blob_name}'
             
