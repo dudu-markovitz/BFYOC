@@ -33,7 +33,7 @@ def validate_rating(rating):
 
 def get_id():
     return str(uuid.uuid4())
-
+# test change comment
 def get_timestamp():
     return datetime.datetime.utcnow().replace(microsecond=0).isoformat(' ')
 
@@ -43,17 +43,7 @@ def get_sentiment (text):
     sentiment_api = os.environ.get('sentiment_api')
     sentiment_key = os.environ.get('sentiment_key')
 
-    documents = \
-        {
-        "documents": [
-            {
-            "language": "en",
-            "id": "1",
-            "text": text
-            }
-        ]
-        }        
-
+    documents = {"documents": [{"language": "en", "id": "1", "text": text}]}        
     url = f'{sentiment_endpoint}{sentiment_api}'
     headers = {"Ocp-Apim-Subscription-Key": sentiment_key}
 
