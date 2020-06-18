@@ -12,6 +12,7 @@ def main(documents: func.DocumentList) -> str:
     event_data_batch = producer.create_batch()
 
     for doc in documents:
+        doc['document_source'] = 'rating'
         event_data_batch.add(EventData(doc.to_json()))    
     try: 
         producer.send_batch(event_data_batch)
