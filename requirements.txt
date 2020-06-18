@@ -2,4 +2,4 @@ azure-functions
 pydocumentdb
 azure.storage.blob
 azure.eventhub
-azure.servicebus==0.50.3
+azure.servicebus
