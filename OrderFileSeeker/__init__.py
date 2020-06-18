@@ -28,6 +28,10 @@ def main(event: func.EventHubEvent):
     for e in event_json:
 
         url = e["data"]["url"]
+
+        if 'orders' not in url:
+            return
+
         url_dirname = os.path.dirname(url)
         url_basename = os.path.basename(url)
         order_id = re.findall(r'\d+', url_basename)[0]
