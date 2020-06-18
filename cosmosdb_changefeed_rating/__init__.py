@@ -11,11 +11,13 @@ def main(documents: func.DocumentList) -> str:
     producer = EventHubProducerClient.from_connection_string(conn_str = eventhub_ns_sap_sl, eventhub_name = eventhub_cosmosdb_change_feed)
     event_data_batch = producer.create_batch()
 
-    for doc in documents:
-        doc["source_collection"] = "rating"
-        event_data_batch.add(EventData(json.dumps(doc)))     
+     logging.info(f'hello02 rating {type(documents), type(doc)}')
 
+    for doc in documents:
+        event_data_batch.add(EventData(json.dumps(doc)))    
     try: 
         producer.send_batch(event_data_batch)
+    except Exception e:
+        logging.info(e)
     finally:
         producer.close()
