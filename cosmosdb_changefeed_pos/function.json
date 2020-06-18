@@ -1,0 +1,15 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "cosmosDBTrigger",
+      "name": "documents",
+      "direction": "in",
+      "leaseCollectionName": "change_feed_monitor",
+      "connectionStringSetting": "cosmosdb_bfyoc_conn_str",
+      "databaseName": "bfyoc",
+      "collectionName": "pos",
+      "createLeaseCollectionIfNotExists": "true"
+    }
+  ]
+}

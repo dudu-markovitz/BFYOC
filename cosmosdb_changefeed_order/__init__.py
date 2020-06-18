@@ -5,7 +5,7 @@ import os, json
 
 def main(documents: func.DocumentList) -> str:
 
-    raise Exception('***** hello01 rating *****')
+    raise Exception('***** hello01 order *****')
 
     eventhub_ns_sap_sl = os.environ.get('eventhub_ns_sap_sl')
     eventhub_cosmosdb_change_feed = os.environ.get('eventhub_cosmosdb_change_feed')
@@ -14,7 +14,7 @@ def main(documents: func.DocumentList) -> str:
     event_data_batch = producer.create_batch()
 
     for doc in documents:
-        doc["source_collection"] = "rating"
+        doc["source_collection"] = "order"
         event_data_batch.add(EventData(json.dumps(doc)))     
 
     try: 
