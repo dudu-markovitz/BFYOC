@@ -11,13 +11,9 @@ def main(documents: func.DocumentList) -> str:
     producer = EventHubProducerClient.from_connection_string(conn_str = eventhub_ns_sap_sl, eventhub_name = eventhub_cosmosdb_change_feed)
     event_data_batch = producer.create_batch()
 
-     logging.info(f'hello02 pos {type(documents), type(doc)}')
-
     for doc in documents:
-        event_data_batch.add(EventData(json.dumps(doc)))    
+        event_data_batch.add(EventData(doc.to_json()))    
     try: 
         producer.send_batch(event_data_batch)
-    except Exception e:
-        logging.info(e)
     finally:
         producer.close()
