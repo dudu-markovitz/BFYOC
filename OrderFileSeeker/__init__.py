@@ -30,7 +30,7 @@ def main(event: func.EventHubEvent):
         url = e["data"]["url"]
         url_dirname = os.path.dirname(url)
         url_basename = os.path.basename(url)
-        order_id = re.findall('\d+', url_basename)[0]
+        order_id = re.findall(r'\d+', url_basename)[0]
 
         blobs = list(container.list_blobs(name_starts_with = order_id))
         
@@ -39,7 +39,7 @@ def main(event: func.EventHubEvent):
         try:
             blob_ts_max = max(blob_ts.values())
         except:
-            raise Exception (f"lama?! {url}")
+            raise Exception (json.dumps({"type":"lama?!", "url": url, "order_id": order_id}))
 
         doc = dict()
 
