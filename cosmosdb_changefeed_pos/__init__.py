@@ -5,8 +5,6 @@ import os, json
 
 def main(documents: func.DocumentList) -> str:
 
-    raise Exception('***** hello01 pos *****')
-
     eventhub_ns_sap_sl = os.environ.get('eventhub_ns_sap_sl')
     eventhub_cosmosdb_change_feed = os.environ.get('eventhub_cosmosdb_change_feed')
 
