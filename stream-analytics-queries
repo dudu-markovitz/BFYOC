@@ -1,0 +1,68 @@
+with 
+posagg as
+(
+    select      d.ArrayValue.productId              as productId
+               ,sum(d.ArrayValue.quantity)          as sum_quantity
+
+    from        [cosmosdb-change-feed] as c
+                cross apply GetArrayElements(c.details) as d
+
+    where       c.document_source = 'pos'
+
+    group by    d.ArrayValue.productId
+               ,tumblingWindow(minute, 5)
+),
+ratingagg as 
+(
+    select      c.productId
+               ,avg(c.sentimentScore) as avg_sentimentScore
+
+    from        [cosmosdb-change-feed] as c 
+
+    where       c.document_source = 'rating'            
+
+    group by    c.productId
+               ,tumblingWindow(minute, 5)    
+)
+
+  -- order
+
+select      'order_sum_quantity_per_locationName'   as report_name
+           ,c.headers.locationName                  as locationName
+           ,sum(d.ArrayValue.quantity)              as quantity
+
+into        [live-reports-order]
+
+from        [cosmosdb-change-feed] as c
+            cross apply GetArrayElements(c.details) as d
+
+where       c.document_source = 'order'
+
+group by    c.headers.locationName
+           ,tumblingWindow(minute, 5)
+
+
+-- pos
+ 
+select     'pos_sum_quantity_per_productId'     as report_name
+           ,p.productName
+           ,a.sum_quantity
+
+into        [live-reports-pos]
+
+from        posagg as a join [products] as p on p.productId = a.productId           
+
+
+-- rating
+
+
+select      'rating_avg_sentimentScore_per_productId'   as report_name
+           ,p.productName
+           ,a.avg_sentimentScore
+
+into        [live-reports-rating]
+
+from        ratingagg as a join [products] as p on a.productId = a.productId    
+
+
+  
